@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "../../types/username";
+import { IUser } from "../../types/user";
 
 const usernameSchema = new Schema<IUser>(
   {
@@ -12,6 +12,5 @@ const usernameSchema = new Schema<IUser>(
     versionKey: false,
   },
 );
-usernameSchema.index({ email: 1 }, { unique: true });
 
-export const usernameModel = model<IUser>("User", usernameSchema);
+export const userModel = model<IUser>("User", usernameSchema);
