@@ -33,7 +33,7 @@ export const loginUser = async (data: LoginInput) => {
   const accessToken = jwt.sign(
     {
       id: user._id.toString(),
-      email: user.email,
+      username: user.username,
     },
     process.env.JWT_SECRET as string,
     { expiresIn: "30m" },

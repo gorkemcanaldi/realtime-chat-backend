@@ -1,6 +1,6 @@
 export interface IMessage {
-  id?: string;
+  _id?: string;
   message: string;
-  username?: string;
-  createdAt: Date;
+  roomId: string;
+  userId: string;
 }

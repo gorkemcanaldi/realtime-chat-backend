@@ -4,11 +4,12 @@ import { IMessage } from "../../types/message";
 const messageSchema = new Schema<IMessage>(
   {
     message: { type: String, required: true },
-    username: { type: String },
+    userId: { type: String, required: true },
+    roomId: { type: String, required: true },
   },
   {
     timestamps: true,
   },
 );
-
-export default model<IMessage>("Message", messageSchema);
+const MessageModel = model<IMessage>("Message", messageSchema);
+export default MessageModel;
