@@ -18,6 +18,7 @@ const usernameSchema = new Schema<IUser>(
       trim: true,
     },
     password: { type: String, required: true, trim: true, select: false },
+    lastSeen: { type: Date, default: Date.now() },
   },
   {
     timestamps: true,
