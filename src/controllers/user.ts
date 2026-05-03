@@ -23,21 +23,22 @@ export const loginController = async (req: Request, res: Response) => {
   const userData: LoginInput = loginSchema.parse(req.body);
   const data = await loginUser(userData);
 
-  res.cookie("accessToken", data, {
+  res.cookie("accessToken", data.accessToken, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
   });
   return res.status(200).send({
     message: "login successful",
     status: 200,
+    data,
   });
 };
 
 export const logoutController = async (req: Request, res: Response) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
   });
   return res.status(200).send({

@@ -7,6 +7,7 @@ import userRouter from "./routes/user";
 import { initServer } from "./sockets/socket";
 import { notRouteHandler } from "./middlewares/notRouteHandler";
 import { errorHandler } from "./middlewares/errorHandler";
+import cors from "cors";
 
 dotenv.config();
 mongoDB();
@@ -14,9 +15,16 @@ mongoDB();
 const app = express();
 const server = http.createServer(app);
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:5173",
+    credentials: true,
     methods: ["GET", "POST"],
   },
 });

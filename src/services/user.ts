@@ -38,5 +38,12 @@ export const loginUser = async (data: LoginInput) => {
     process.env.JWT_SECRET as string,
     { expiresIn: "30m" },
   );
-  return accessToken;
+  return {
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+    accessToken,
+  };
 };

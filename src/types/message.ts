@@ -1,6 +1,16 @@
+import { Types } from "mongoose";
+
 export interface IMessage {
-  _id?: string;
   message: string;
   roomId: string;
-  userId: string;
+  userId: Types.ObjectId;
+}
+// Populated
+export interface IMessagePopulated {
+  message: string;
+  roomId: string;
+  userId: {
+    _id: string;
+    username: string;
+  };
 }
