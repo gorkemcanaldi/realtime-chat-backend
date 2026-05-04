@@ -38,6 +38,17 @@ export const loginUser = async (data: LoginInput) => {
     process.env.JWT_SECRET as string,
     { expiresIn: "30m" },
   );
+
+  const refreshToken = jwt.sign(
+    {
+      id: user._id.toString(),
+    },
+    process.env.JWT_REFRESH_SECRET as string,
+    {
+      expiresIn: "24h",
+    },
+  );
+
   return {
     user: {
       id: user._id,
@@ -45,5 +56,23 @@ export const loginUser = async (data: LoginInput) => {
       email: user.email,
     },
     accessToken,
+    refreshToken,
   };
+};
+
+export const refreshUser = async (token: string) => {
+  const decoded = jwt.verify(
+    token,
+    process.env.JWT_REFRESH_SECRET as string,
+  ) as { id: string };
+
+  const user = await userModel.findById(decoded.id);
+
+  if (!user) throw createHttpError(404, "user not found");
+  const accessToken = jwt.sign(
+    { id: user._id.toString() },
+    process.env.JWT_SECRET as string,
+    { expiresIn: "15m" },
+  );
+  return accessToken;
 };

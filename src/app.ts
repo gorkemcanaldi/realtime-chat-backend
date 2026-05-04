@@ -8,7 +8,7 @@ import { initServer } from "./sockets/socket";
 import { notRouteHandler } from "./middlewares/notRouteHandler";
 import { errorHandler } from "./middlewares/errorHandler";
 import cors from "cors";
-
+import cookieParser from "cookie-parser";
 dotenv.config();
 mongoDB();
 
@@ -28,6 +28,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+app.use(cookieParser());
 
 initServer(io);
 app.use("/user", userRouter);

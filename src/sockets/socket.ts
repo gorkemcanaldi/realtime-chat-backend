@@ -55,6 +55,7 @@ export const initServer = (io: Server) => {
           roomId: m.roomId,
           username: m.userId.username,
           userId: m.userId._id.toString(),
+          _id: m._id,
         }));
         socket.emit("room_message", formattedMessages);
       }),
@@ -75,10 +76,11 @@ export const initServer = (io: Server) => {
         )) as unknown as IMessagePopulated;
 
         io.to(data.roomId).emit("receive_message", {
+          _id: popMessage._id,
           message: popMessage.message,
           roomId: popMessage.roomId,
           username: (popMessage.userId as any).username,
-          userId: popMessage.userId._id.toString(),
+          userId: (popMessage.userId as any)._id.toString(),
         });
       }),
     );
@@ -88,9 +90,7 @@ export const initServer = (io: Server) => {
       console.log("user disconnected", socket.id);
 
       for (const roomId in rooms) {
-        rooms[roomId] = rooms[roomId].filter(
-          (u) => u.userId !== socket.data.userId,
-        );
+        rooms[roomId] = rooms[roomId].filter((u) => u.socketId !== socket.id);
         io.to(roomId).emit("room_users", rooms[roomId]);
       }
 
