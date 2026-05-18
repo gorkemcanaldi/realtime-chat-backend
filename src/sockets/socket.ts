@@ -1,29 +1,41 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import jwt from "jsonwebtoken";
 import MessageModel from "../db/models/Message";
 import { userModel } from "../db/models/User";
 import { socketHandler } from "../utils/socketHandler";
 import { IMessagePopulated } from "../types/message";
+import * as cookie from "cookie";
+
 const rooms: Record<
   string,
   { socketId: string; userId: string; username: string }[]
 > = {};
-export const initServer = (io: Server) => {
-  io.on("connection", (socket) => {
-    try {
-      const token = socket.handshake.auth.token;
-      if (!token) {
-        return socket.disconnect();
-      }
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-        id: string;
-      };
-      socket.data.userId = decoded.id;
-      console.log("user connected", socket.id);
-    } catch (error) {
-      return socket.disconnect();
-    }
 
+const socketAuth = (socket: Socket, next: any) => {
+  try {
+    const cookies = socket.handshake.headers.cookie;
+
+    if (!cookies) return next(new Error("no cookie"));
+
+    const parsedCookies = cookie.parse(cookies);
+    const token = parsedCookies.accessToken;
+
+    if (!token) return next(new Error("no token"));
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+      id: string;
+    };
+    socket.data.userId = decoded.id;
+    next();
+  } catch {
+    return next(new Error("Unauthorized"));
+  }
+};
+
+export const initServer = (io: Server) => {
+  io.use(socketAuth);
+  io.on("connection", (socket) => {
+    console.log("user connected", socket.id);
     socket.on(
       "join_room",
       socketHandler(async (roomId: string) => {

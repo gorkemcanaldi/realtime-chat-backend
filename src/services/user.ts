@@ -70,7 +70,7 @@ export const refreshUser = async (token: string) => {
 
   if (!user) throw createHttpError(404, "user not found");
   const accessToken = jwt.sign(
-    { id: user._id.toString() },
+    { id: user._id.toString(), username: user.username },
     process.env.JWT_SECRET as string,
     { expiresIn: "15m" },
   );

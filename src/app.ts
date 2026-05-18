@@ -14,7 +14,6 @@ mongoDB();
 
 const app = express();
 const server = http.createServer(app);
-app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -29,6 +28,7 @@ const io = new Server(server, {
   },
 });
 app.use(cookieParser());
+app.use(express.json());
 
 initServer(io);
 app.use("/user", userRouter);

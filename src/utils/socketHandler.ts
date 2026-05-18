@@ -1,9 +1,10 @@
 export const socketHandler =
-  (fn: (...args: any[]) => Promise<void>) =>
-  async (...args: any[]) => {
+  (fn: (socket: any, ...args: any[]) => Promise<void>) =>
+  async (socket: any, ...args: any[]) => {
     try {
-      await fn(...args);
+      await fn(socket, ...args);
     } catch (err) {
       console.error("socket error:", err);
+      socket.emit("socket_error", "Something went wrong");
     }
   };
