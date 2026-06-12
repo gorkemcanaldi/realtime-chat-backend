@@ -17,6 +17,12 @@ const usernameSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
+    avatar: {
+      type: String,
+      default: "/images/person.png",
+    },
+    bio: { type: String, default: "" },
+    isOnline: { type: Boolean, default: false },
     password: { type: String, required: true, trim: true, select: false },
     lastSeen: { type: Date, default: Date.now },
   },

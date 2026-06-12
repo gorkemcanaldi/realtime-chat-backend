@@ -4,4 +4,7 @@ export interface IUser {
   email: string;
   password: string;
   lastSeen?: Date;
+  avatar: string;
+  bio: string;
+  isOnline: boolean;
 }
