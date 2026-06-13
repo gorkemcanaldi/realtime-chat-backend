@@ -5,7 +5,11 @@ const FriendRequestSchema = new Schema<IFriendRequestTyp>(
   {
     senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     receiverId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    status: { type: String, enum: ["pending", "accepted", "rejected"] },
+    status: {
+      type: String,
+      enum: ["pending", "accepted", "rejected"],
+      required: true,
+    },
   },
   { timestamps: true },
 );
